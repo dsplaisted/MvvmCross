@@ -23,7 +23,7 @@ namespace CrossUI.Touch.Dialog.Elements
     /// properties, or as UIViews to be shown (HeaderView and FooterView).   Internally
     /// this uses the same storage, so you can only show one or the other.
     /// </remarks>
-	public class Section : Element, IEnumerable, ISection {
+	public class Section : Element, IEnumerable { // , ISection {
         object _header;
         object _footer;
         private List<Element> _elements = new List<Element> ();
@@ -39,7 +39,9 @@ namespace CrossUI.Touch.Dialog.Elements
         /// <summary>
         ///  Constructs a Section without header or footers.
         /// </summary>
-        public Section () : base (null) {}
+        public Section () : base (null) {
+			Elements = new List<Element>();
+		}
 		
         /// <summary>
         ///  Constructs a Section with the specified header
@@ -49,7 +51,8 @@ namespace CrossUI.Touch.Dialog.Elements
         /// </param>
         public Section (string caption) : base (caption)
         {
-        }
+			Elements = new List<Element>();
+		}
 		
         /// <summary>
         /// Constructs a Section with a header and a footer
@@ -63,21 +66,21 @@ namespace CrossUI.Touch.Dialog.Elements
         public Section (string caption, string footer) : base (caption)
         {
             Footer = footer;
-        }
+			Elements = new List<Element>();
+		}
 
         public Section (UIView header) : base (null)
         {
-#warning Header view removed
-            //HeaderView = header;
-        }
+            HeaderView = header;
+			Elements = new List<Element>();
+		}
 		
         public Section (UIView header, UIView footer) : base (null)
         {
-#warning Header view removed
-
-            //HeaderView = header;
-            //FooterView = footer;
-        }
+            HeaderView = header;
+            FooterView = footer;
+			Elements = new List<Element>();
+		}
 		
         /// <summary>
         ///    The section header, as a string
@@ -107,9 +110,9 @@ namespace CrossUI.Touch.Dialog.Elements
         /// <summary>
         /// The section's header view.  
         /// </summary>
-        public IElement HeaderView {
+        public UIView HeaderView {
             get {
-                return _header as IElement;
+                return _header as UIView;
             }
             set {
                 _header = value;
@@ -119,19 +122,14 @@ namespace CrossUI.Touch.Dialog.Elements
         /// <summary>
         /// The section's footer view.
         /// </summary>
-        public IElement FooterView {
+        public UIView FooterView {
             get {
-                return _footer as IElement;
+                return _footer as UIView;
             }
             set {
                 _footer = value;
             }
         }
-
-		public void Add (IElement element)
-		{
-			Add(element as Element);
-		}
 
         /// <summary>
         /// Adds a new child Element to the Section
@@ -143,8 +141,8 @@ namespace CrossUI.Touch.Dialog.Elements
         {
             if (element == null)
                 return;
-			
-            Elements.Add (element);
+
+			Elements.Add(element);
             element.Parent = this;
 			
             if (Parent != null)
